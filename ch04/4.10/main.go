@@ -7,7 +7,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/sh-tatsuno/go-training/ch04/github"
+	"github.com/sh-tatsuno/go-training/ch04/4.10/github"
 )
 
 func main() {
