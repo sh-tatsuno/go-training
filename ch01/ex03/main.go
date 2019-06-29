@@ -6,21 +6,20 @@ import (
 	"strings"
 )
 
-func echoSlow() {
+func echoSlow(args []string) string {
 	var s, sep string
-	for i := 0; i < len(os.Args); i++ {
-		s += sep + os.Args[i]
+	for i := 0; i < len(args); i++ {
+		s += sep + args[i]
 		sep = " "
 	}
-	fmt.Println(s)
+	return s
 }
 
-func echoFast() {
-	fmt.Println(strings.Join(os.Args, " "))
+func echoFast(args []string) string {
+	return strings.Join(args, " ")
 }
 
 func main() {
-	echoSlow()
-
-	echoFast()
+	fmt.Println(echoSlow(os.Args))
+	fmt.Println(echoFast(os.Args))
 }

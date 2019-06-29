@@ -4,11 +4,17 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func main() {
-	for i, arg := range os.Args {
-		s := strconv.Itoa(i) + " : " + arg
-		fmt.Println(s)
+	fmt.Println(run(os.Args))
+}
+
+func run(args []string) string {
+	s := ""
+	for i, arg := range args {
+		s += strconv.Itoa(i) + " : " + arg + "\n"
 	}
+	return strings.Trim(s, "\n")
 }
