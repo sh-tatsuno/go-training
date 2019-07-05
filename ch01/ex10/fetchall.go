@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -12,13 +13,22 @@ import (
 func main() {
 	start := time.Now()
 	ch := make(chan string)
+	output := ""
 	for _, url := range os.Args[1:] {
 		go fetch(url, ch)
 	}
 	for range os.Args[1:] {
-		fmt.Println(<-ch)
+		output = fmt.Sprintf("%s\n %s", output, <-ch)
 	}
+	file, err := os.Create("output.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	file.Write(([]byte)(output))
 	fmt.Printf("%.2fs elapsed\n", time.Since(start).Seconds())
+
 }
 
 func fetch(url string, ch chan<- string) {
