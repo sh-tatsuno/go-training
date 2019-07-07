@@ -52,6 +52,7 @@ func corner(i, j int) (float64, float64, bool) {
 }
 
 func f(x, y float64) float64 {
-	r := math.Hypot(x, y) // distance from (0,0)
-	return math.Sin(r) / r
+	t := 2.5
+	z := -0.5 * (math.Abs(math.Sin(x/t)) + math.Abs(math.Sin(y/t)))
+	return z
 }
