@@ -17,8 +17,7 @@ func echo(c net.Conn, shout string, delay time.Duration) {
 	fmt.Fprintln(c, "\t", strings.ToLower(shout))
 }
 
-//　うまく閉じなかった
-func handleConn(c net.Conn) {
+func handleConn(c net.Conn, done chan struct{}) {
 	input := bufio.NewScanner(c)
 
 	// タイマーを張る
@@ -34,6 +33,7 @@ func handleConn(c net.Conn) {
 			case <-timer:
 				c.Close()
 				fmt.Println("connection closed")
+				done <- struct{}{}
 			}
 		}
 	}(c, called)
@@ -53,6 +53,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	done := make(chan struct{})
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
@@ -60,7 +61,12 @@ func main() {
 			continue
 		}
 
-		go handleConn(conn)
+		go handleConn(conn, done)
+
+		select {
+		case <-done:
+			return
+		}
 	}
 
 }
